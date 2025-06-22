@@ -108,7 +108,7 @@ var port = process.env.PORT || '3000';
 
 // ✅ Đặt trước tất cả route
 app.use(cors({
-  origin: 'https://shopcuapon.vercel.app/',
+  origin: 'https://shopcuapon.vercel.app',
   credentials: true
 }));
 app.options('*', cors(corsOptionsDelegate)); // ✅ Cho phép preflight request
