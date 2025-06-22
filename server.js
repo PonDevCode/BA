@@ -8,14 +8,30 @@ const configViewEngine = require('./config/configViewEngine')
 const index = require('./routes/api')
 
 
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions= { 
-    origin: true,
-    credentials: true // cấu hình để FE nhận dc cookies
-   };
+// var corsOptionsDelegate = function (req, callback) {
+//   var corsOptions= { 
+//     origin: true,
+//     credentials: true // cấu hình để FE nhận dc cookies
+//    };
   
+//   callback(null, corsOptions);
+// }
+
+const whitelist = [
+  'http://localhost:5174',
+  'https://ba-gep3.onrender.com' // add chính domain đã deploy
+];
+
+var corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true, credentials: true };
+  } else {
+    corsOptions = { origin: false };
+  }
   callback(null, corsOptions);
-}
+};
+
 
 connect(); // kết nối mongo
 var app = express();
