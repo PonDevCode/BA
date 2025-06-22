@@ -23,9 +23,11 @@ mongoose.set('strictQuery', true);
 require('dotenv').config();
 console.log(process.env.MONGO_DB_URL);
 
+const url = 'mongodb+srv://pondevcode:vMPWO9hW3hVJ4y5Q@pondev.liucfuf.mongodb.net/BA?retryWrites=true&w=majority&appName=Pondev'
+
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_DB_URL);
+        await mongoose.connect(url);
         console.log('✅ kết nối MongoDB thành công');
     } catch (error) {
         console.log('❌ kết nối MongoDB thất bại');
