@@ -21,6 +21,7 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 require('dotenv').config();
+console.log(process.env.MONGO_URI);
 
 const connect = async () => {
     try {
