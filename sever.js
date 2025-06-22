@@ -19,7 +19,7 @@ var corsOptionsDelegate = function (req, callback) {
 
 connect(); // kết nối mongo
 var app = express();
-const port = 8080
+var port = process.env.PORT || '3000'
 const hostname = "localhost"
 
 
