@@ -1,21 +1,87 @@
 
+// var express = require('express');
+// const cookieParser = require('cookie-parser');
+
+// var {connect} = require('./config/db')
+// var cors = require('cors')
+// const configViewEngine = require('./config/configViewEngine')
+// const index = require('./routes/api')
+
+
+// // var corsOptionsDelegate = function (req, callback) {
+// //   var corsOptions= { 
+// //     origin: true,
+// //     credentials: true // cấu hình để FE nhận dc cookies
+// //    };
+  
+// //   callback(null, corsOptions);
+// // }
+
+// const whitelist = [
+//   'http://localhost:5174',
+//   'https://ba-gep3.onrender.com'
+// ];
+
+// const corsOptionsDelegate = function (req, callback) {
+//   const origin = req.header('Origin');
+//   if (whitelist.includes(origin)) {
+//     callback(null, {
+//       origin: origin,
+//       credentials: true
+//     });
+//   } else {
+//     callback(null, {
+//       origin: false
+//     });
+//   }
+// };
+
+
+// connect(); // kết nối mongo
+// var app = express();
+// var port = process.env.PORT || '3000'
+// const hostname = "localhost"
+
+
+// configViewEngine(app);
+// // cấu hình cookies để lấy làm refres_token
+// app.use(cookieParser());  
+// app.use(cors(corsOptionsDelegate));
+
+// /* 
+//    config req.body
+// */
+// // app.use(express.static('./uploads'))
+// // app.use('/uploads', express.static('uploads'))
+// app.use('/uploads/images', express.static('uploads/images'));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+
+
+// /* 
+//    web - router
+// */
+// app.use('/', index);
+
+
+
+// // view engine setup
+
+// // app.listen(port,hostname, () => {
+// //   console.log(`Example app listening on port ${port},${hostname}`)
+// // })
+
+
+// module.exports = app;
+
+
 var express = require('express');
 const cookieParser = require('cookie-parser');
-
-var {connect} = require('./config/db')
-var cors = require('cors')
-const configViewEngine = require('./config/configViewEngine')
-const index = require('./routes/api')
-
-
-// var corsOptionsDelegate = function (req, callback) {
-//   var corsOptions= { 
-//     origin: true,
-//     credentials: true // cấu hình để FE nhận dc cookies
-//    };
-  
-//   callback(null, corsOptions);
-// }
+var { connect } = require('./config/db');
+var cors = require('cors');
+const configViewEngine = require('./config/configViewEngine');
+const index = require('./routes/api');
 
 const whitelist = [
   'http://localhost:5174',
@@ -26,51 +92,35 @@ const corsOptionsDelegate = function (req, callback) {
   const origin = req.header('Origin');
   if (whitelist.includes(origin)) {
     callback(null, {
-      origin: origin,
-      credentials: true
+      origin: true,             // hoặc origin: origin,
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization']
     });
   } else {
-    callback(null, {
-      origin: false
-    });
+    callback(null, { origin: false });
   }
 };
 
-
 connect(); // kết nối mongo
 var app = express();
-var port = process.env.PORT || '3000'
-const hostname = "localhost"
+var port = process.env.PORT || '3000';
 
-
-configViewEngine(app);
-// cấu hình cookies để lấy làm refres_token
-app.use(cookieParser());  
+// ✅ Đặt trước tất cả route
 app.use(cors(corsOptionsDelegate));
+app.options('*', cors(corsOptionsDelegate)); // ✅ Cho phép preflight request
 
-/* 
-   config req.body
-*/
-// app.use(express.static('./uploads'))
-// app.use('/uploads', express.static('uploads'))
-app.use('/uploads/images', express.static('uploads/images'));
+// Cấu hình cookies, body parser
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads/images', express.static('uploads/images'));
 
+configViewEngine(app);
 
-
-/* 
-   web - router
-*/
+// Router
 app.use('/', index);
 
-
-
-// view engine setup
-
-// app.listen(port,hostname, () => {
-//   console.log(`Example app listening on port ${port},${hostname}`)
-// })
-
-
+// Export
 module.exports = app;
+
