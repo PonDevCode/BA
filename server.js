@@ -19,17 +19,21 @@ const index = require('./routes/api')
 
 const whitelist = [
   'http://localhost:5174',
-  'https://ba-gep3.onrender.com' // add chính domain đã deploy
+  'https://ba-gep3.onrender.com'
 ];
 
-var corsOptionsDelegate = function (req, callback) {
-  let corsOptions;
-  if (whitelist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true, credentials: true };
+const corsOptionsDelegate = function (req, callback) {
+  const origin = req.header('Origin');
+  if (whitelist.includes(origin)) {
+    callback(null, {
+      origin: origin,
+      credentials: true
+    });
   } else {
-    corsOptions = { origin: false };
+    callback(null, {
+      origin: false
+    });
   }
-  callback(null, corsOptions);
 };
 
 
