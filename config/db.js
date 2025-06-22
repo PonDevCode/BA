@@ -21,11 +21,11 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 require('dotenv').config();
-console.log(process.env.MONGO_DB_UR);
+console.log(process.env.MONGO_DB_URL);
 
 const connect = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_DB_UR);
+        await mongoose.connect(process.env.MONGO_DB_URL);
         console.log('✅ kết nối MongoDB thành công');
     } catch (error) {
         console.log('❌ kết nối MongoDB thất bại');
